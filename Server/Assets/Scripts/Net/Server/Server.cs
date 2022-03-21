@@ -1,62 +1,51 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Networking.Transport;
 using UnityEngine;
 
-
-
 public class Server : MonoBehaviour
 {
-    #region Server Singleton
-    private static Server _instance;
-
-    public static Server Instance { get { return _instance; } }
-
+    #region Singleton
+    public static Server Instance { set; get; }
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-
+        Instance = this;
     }
     #endregion
 
     public NetworkDriver driver;
-    private NativeList<NetworkConnection> connections;
+    private NativeList<NetworkConnection> connections; 
 
     private bool isActive = false;
     private const float keepAliveTickRate = 20.0f;
     private float lastKeepAlive;
 
     public Action connectionDropped;
-   
+
     public void Init(ushort port)
     {
         driver = NetworkDriver.Create();
         NetworkEndPoint endPoint = NetworkEndPoint.AnyIpv4;
         endPoint.Port = port;
 
-        if(driver.Bind(endPoint) != 0)
+        if (driver.Bind(endPoint) != 0)
+        {
             Debug.Log("Unable to bind on port: " + endPoint.Port);
+        }
         else
         {
             driver.Listen();
             Debug.Log("Currently listening on port: " + endPoint.Port);
         }
 
-        connections = new NativeList<NetworkConnection>(64, Allocator.Persistent);
+        connections = new NativeList<NetworkConnection>(2, Allocator.Persistent); 
         isActive = true;
 
     }
-
-    public void ShutDown()
+    public void ShutDown() 
     {
         if (isActive)
         {
@@ -65,22 +54,22 @@ public class Server : MonoBehaviour
             isActive = false;
         }
     }
-
     private void OnDestroy()
     {
         ShutDown();
     }
 
-    private void Update()
+    public void Update()
     {
         if (!isActive)
             return;
-        KeepAlive();
-        driver.ScheduleUpdate().Complete();
 
-        CleanupConnections();
+        KeepAlive(); 
+        driver.ScheduleUpdate().Complete(); 
+
+        CleanupConnections(); 
         AcceptNewConnections();
-        UpdateMessage();
+        UpdateMessagePump(); 
     }
 
     private void KeepAlive()
@@ -88,12 +77,13 @@ public class Server : MonoBehaviour
         if (Time.time - lastKeepAlive > keepAliveTickRate)
         {
             lastKeepAlive = Time.time;
+            SendToAllClients(new NetKeepAlive());
         }
     }
 
     private void CleanupConnections()
     {
-        for (int i = 0; i < connections.Length; i++)
+        for (int i = 0; i < connections.Length; i++) 
         {
             if (!connections[i].IsCreated) 
             {
@@ -102,16 +92,16 @@ public class Server : MonoBehaviour
             }
         }
     }
-
     private void AcceptNewConnections()
     {
         NetworkConnection c;
-        while ((c = driver.Accept()) != default(NetworkConnection)) 
+        while ((c = driver.Accept()) != default(NetworkConnection))
         {
             connections.Add(c);
         }
     }
-    private void UpdateMessage()
+
+    private void UpdateMessagePump()
     {
         DataStreamReader reader;
         for (int i = 0; i < connections.Length; i++)
@@ -128,7 +118,7 @@ public class Server : MonoBehaviour
                     Debug.Log("Client disconnected from server");
                     connections[i] = default(NetworkConnection);
                     connectionDropped?.Invoke();
-                    ShutDown(); 
+                    ShutDown();
                 }
             }
         }
@@ -148,9 +138,9 @@ public class Server : MonoBehaviour
         {
             if (connections[i].IsCreated)
             {
-                Debug.Log($"Sending {msg.Code} to : {connections[i].InternalId}");
                 SendToClient(connections[i], msg);
             }
         }
     }
+
 }

@@ -6,6 +6,12 @@ using UnityEngine;
 public enum OpCode
 {
     KEEP_ALIVE = 1,
+    WELCOME = 2,
+    START_GAME = 3,
+    MAKE_MOVE = 4,
+    MAKE_ATTACK = 5,
+    USE_TARGET_ABILITY = 6,
+    MAKE_TRIKSTER_MOVE = 7,
 }
 public static class NetUtility
 {
@@ -19,6 +25,24 @@ public static class NetUtility
             case OpCode.KEEP_ALIVE:
                 msg = new NetKeepAlive(reader);
                 break;
+            case OpCode.WELCOME:
+                msg = new NetWelcome(reader);
+                break;
+            case OpCode.START_GAME:
+                msg = new NetStartGame(reader);
+                break;
+            case OpCode.MAKE_MOVE:
+                msg = new NetMakeMove(reader);
+                break;
+            case OpCode.MAKE_ATTACK:
+                msg = new NetMakeAttack(reader);
+                break;
+            case OpCode.USE_TARGET_ABILITY:
+                msg = new NetTargetAbility(reader);
+                break;
+            case OpCode.MAKE_TRIKSTER_MOVE:
+                msg = new NetTriksterIlluMakeMove(reader);
+                break;
             default:
                 Debug.Log("Message received had no OpCode");
                 break;
@@ -30,4 +54,10 @@ public static class NetUtility
 
     // Net message
     public static Action<NetMessage, NetworkConnection> S_KEEP_ALIVE;
+    public static Action<NetMessage, NetworkConnection> S_WELCOME_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_START_GAME_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_MAKE_MOVE_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_MAKE_ATTACK_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_USE_TARGET_ABILITY_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_MAKE_TRIKSER_MOVE_REQUEST;
 }
