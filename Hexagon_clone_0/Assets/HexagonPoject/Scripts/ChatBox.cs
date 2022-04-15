@@ -11,9 +11,11 @@ public class ChatBox : MonoBehaviour
     public TMP_InputField input;
     [SerializeField]
     List<Message> messageList = new List<Message>();
+    Animator anim = null;
+
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -76,6 +78,19 @@ public class ChatBox : MonoBehaviour
         public TextMeshProUGUI textObject;
         public string nickname;
         public string userID;
+    }
+
+    public void ChatSelected()
+    {
+        anim.SetBool("ShowChat",true);
+        if (Manager.UIManager.Instance.friendsAnim.GetBool("ShowFriendList"))
+            Manager.UIManager.Instance.HideFriends();
+    }
+
+    public void ChatDeselect()
+    {
+        anim.SetBool("ShowChat", false);
+        input.text = "";
     }
 
 }

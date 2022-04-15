@@ -31,3 +31,31 @@ public class NetWelcome : NetMessage
         NetUtility.S_WELCOME_REQUEST?.Invoke(this, connection);
     }
 }
+public class NetChalengeRoyalCounter : NetMessage
+{
+    public NetChalengeRoyalCounter()
+    {
+        Code = OpCode.CHALENGE_ROYAL_COUNTER;
+    }
+
+    public NetChalengeRoyalCounter(DataStreamReader reader)
+    {
+        Code = OpCode.CHALENGE_ROYAL_COUNTER;
+
+    }
+
+    public override void Serialize(ref DataStreamWriter writer)
+    {
+        writer.WriteByte((byte)Code);
+    }
+
+    public override void Deserialize(DataStreamReader reader)
+    {
+    }
+
+    public override void ReceivedOnServer(NetworkConnection connection)
+    {
+        NetUtility.S_CHALENGE_ROYAL_COUTNER_REQUEST?.Invoke(this, connection);
+    }
+}
+

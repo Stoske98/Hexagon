@@ -47,6 +47,11 @@ public class ServerManager : MonoBehaviour
         NetUtility.S_MAKE_ATTACK_REQUEST += OnMakeAttackRequest;
         NetUtility.S_USE_TARGET_ABILITY_REQUEST += OnUseTargetAbilityRequest;
         NetUtility.S_MAKE_TRIKSER_MOVE_REQUEST += OnTriksterMoveRequest;
+        NetUtility.S_ARCHER_SPECIAL_ABILITY_REQUEST += OnArcherSpecialAbilityRequest;
+        NetUtility.S_REMOVE_FIELDS_REQUEST += OnRemoveFieldsRequst;
+        NetUtility.S_AKTIVATE_KING_SPECIAL_ABILITY_REQUEST += OnKingSpecialAbilityRequest;
+        NetUtility.S_SWORDSMAN_PASSIVE_REQUEST += OnSwordsmanPassiveRequest;
+        NetUtility.S_CHALENGE_ROYAL_COUTNER_REQUEST += OnChalengeRoyalCounterRequest;
     }
     public void UnregisterToEvent()
     {
@@ -54,7 +59,12 @@ public class ServerManager : MonoBehaviour
         NetUtility.S_START_GAME_REQUEST -= OnStartGameRequest;
         NetUtility.S_MAKE_MOVE_REQUEST -= OnMakeMoveRequest;
         NetUtility.S_USE_TARGET_ABILITY_REQUEST -= OnUseTargetAbilityRequest;
-        NetUtility.S_MAKE_TRIKSER_MOVE_REQUEST = OnTriksterMoveRequest;
+        NetUtility.S_MAKE_TRIKSER_MOVE_REQUEST -= OnTriksterMoveRequest;
+        NetUtility.S_ARCHER_SPECIAL_ABILITY_REQUEST -= OnArcherSpecialAbilityRequest;
+        NetUtility.S_REMOVE_FIELDS_REQUEST -= OnRemoveFieldsRequst;
+        NetUtility.S_AKTIVATE_KING_SPECIAL_ABILITY_REQUEST -= OnKingSpecialAbilityRequest;
+        NetUtility.S_SWORDSMAN_PASSIVE_REQUEST -= OnSwordsmanPassiveRequest;
+        NetUtility.S_CHALENGE_ROYAL_COUTNER_REQUEST -= OnChalengeRoyalCounterRequest;
     }
        
 
@@ -91,6 +101,35 @@ public class ServerManager : MonoBehaviour
     {
         NetTriksterIlluMakeMove msg = message as NetTriksterIlluMakeMove;
         Debug.Log("Move Triksetr");
+        Server.Instance.SendToAllClients(msg);
+    }
+
+    private void OnArcherSpecialAbilityRequest(NetMessage message, NetworkConnection connection)
+    {
+        ServerJobSystem.OnArcherSpecialAbilityRequest(message, connection);
+    }
+
+    private void OnRemoveFieldsRequst(NetMessage message, NetworkConnection connection)
+    {
+        NetRemoveFields msg = message as NetRemoveFields;
+        Server.Instance.SendToAllClients(msg);
+    }
+    private void OnKingSpecialAbilityRequest(NetMessage message, NetworkConnection connection)
+    {
+        NetActivateKingSpecialAbility msg = message as NetActivateKingSpecialAbility;
+        Server.Instance.SendToAllClients(msg);
+    }
+
+    private void OnSwordsmanPassiveRequest(NetMessage message, NetworkConnection connection)
+    {
+        NetSwordsmanPassive msg = message as NetSwordsmanPassive;
+        Debug.Log("Server send swordsman passive for team: " + msg.Team);
+        Server.Instance.SendToAllClients(msg);
+    }
+
+    private void OnChalengeRoyalCounterRequest(NetMessage message, NetworkConnection connection)
+    {
+        NetChalengeRoyalCounter msg = message as NetChalengeRoyalCounter;
         Server.Instance.SendToAllClients(msg);
     }
 }

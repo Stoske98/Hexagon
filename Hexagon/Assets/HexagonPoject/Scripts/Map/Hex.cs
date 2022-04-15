@@ -24,7 +24,7 @@ public class Hex
 
     const float HEIGHT = 1;
     const float WIDTH = 0.5773502050459253f;
-    const float OFFSET = 1.05f;
+    const float OFFSET = 1.00698f;
 
     public readonly List<Vector2Int> evenColumnNeighbors = new List<Vector2Int> { new Vector2Int(0, 1), new Vector2Int(0, -1), new Vector2Int(-1, 0), new Vector2Int(1, 0), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
     public readonly List<Vector2Int> oddColumnNeighbors = new List<Vector2Int> { new Vector2Int(0, 1), new Vector2Int(0, -1), new Vector2Int(-1, 1), new Vector2Int(1, 1), new Vector2Int(-1, 0), new Vector2Int(1, 0) };

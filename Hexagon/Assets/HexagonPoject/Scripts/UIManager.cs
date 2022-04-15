@@ -27,8 +27,10 @@ namespace Manager
 
         }
         #endregion
+
         [Header("Canvas")]
-        public GameObject canvas;
+        public Canvas canvas;
+
         [Header("Login")]
         public GameObject login_panel;
         public TMP_InputField email_login;
@@ -44,12 +46,16 @@ namespace Manager
         public GameObject sincdata_panel;
         [Header("Main Menu")]
         public GameObject main_menu;
+        public Animator main_anim;
 
         [Header("Chat Box")]
         public ChatBox chatbox;
 
         [Header("Friend Box")]
         public FriendBox friendBox;
+        public Animator friendsAnim;
+        public GameObject XButton;
+        public Button friendsButton;
 
         [Header("Match Accept")]
         public GameObject match;
@@ -65,6 +71,15 @@ namespace Manager
         public Button match_finding_btn;
         public Animator match_finding_anim;
         public Michsky.UI.Shift.QuickMatchButton matchButton;
+        [HideInInspector]
+        public bool startFindingMatch;
+
+        [Header("Player")]
+        public TextMeshProUGUI player_name;
+        public TextMeshProUGUI player_rank;
+        public TextMeshProUGUI rank_name;
+
+
         public void OnLogin()
         {
             // send on server email and password and check in data base is there that account
@@ -115,5 +130,66 @@ namespace Manager
             match_finding_text.text = "FIND MATCH";
             match_finding_btn.interactable = true;
         }
+
+        public void SelectTeam(int team)
+        {
+            // anim
+            if (team == 0)
+                main_anim.SetBool("Light",true);
+            else
+                main_anim.SetBool("Dark", true);
+            GameManager.Instance.selected_class = team;
+        }
+
+        public void BackToTheMiddleOfTheMainMenu()
+        {
+            // prekinuti trazenje game
+            if (GameManager.Instance.selected_class == 0)
+                main_anim.SetBool("Light", false);
+            else
+                main_anim.SetBool("Dark", false);
+
+            GameManager.Instance.selected_class = -1;
+        }
+
+        public void ShowFriends()
+        {
+            friendsAnim.SetBool("ShowFriendList", true);
+            XButton.SetActive(true);
+            friendsButton.interactable = false;
+        }
+
+        public void HideFriends()
+        {
+            friendsAnim.SetBool("ShowFriendList", false);
+            XButton.SetActive(false);
+            friendsButton.interactable = true;
+        }
+
+        public void SetPlayerInfo(string name, int rank)
+        {
+            player_name.text = name;
+            player_rank.text = rank.ToString();
+        }
+
+        public void StartFindingMatch()
+        {
+            if(!startFindingMatch)
+            {
+                Matchmaking.Instance.CreateTicket(GameManager.Instance.selected_class);
+                startFindingMatch = true;
+            }
+        }
+
+        public void StopFindingMatch()
+        {
+            if(startFindingMatch)
+            {
+                Matchmaking.Instance.CancelMatchFinding();
+                match_finding_btn.interactable = false;
+                startFindingMatch = false;
+            }
+        }
+
     }
 }

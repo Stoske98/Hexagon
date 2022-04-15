@@ -24,7 +24,7 @@ public class Knight : Melee
                     {
                         foreach (SpecialMovesAttackFields specialMoves in ksmaf)
                         {
-                            if(specialMoves.DesiredHex == path[0])
+                            if (specialMoves.DesiredHex == path[0])
                             {
                                 if (specialMoves.FirstUnit != null && specialMoves.FirstUnit.Team != Team)
                                     specialMoves.FirstUnit.RecieveDamage(1);
@@ -154,7 +154,44 @@ public class Knight : Melee
             betweenHex2 = Map.Instance.GetHex(hex.Column - 1, hex.Row);
             addToSpecialMove(desiredHex, betweenHex1, betweenHex2);
         }
-            return specialMoves;
+
+        //top
+        AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column, hex.Row + 1)), Map.Instance.GetHex(hex.Column, hex.Row + 2));
+        //bottom
+        AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column, hex.Row - 1)), Map.Instance.GetHex(hex.Column, hex.Row - 2));
+        if (hex.Column % 2 != 0)
+        {
+            //topLeft
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column - 1, hex.Row)), Map.Instance.GetHex(hex.Column - 2, hex.Row - 1));
+            //topRight
+            AddHexesInDirection(ref specialMoves,Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column + 1, hex.Row)), Map.Instance.GetHex(hex.Column + 2, hex.Row - 1));
+            //bottomLeft
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column - 1, hex.Row + 1)), Map.Instance.GetHex(hex.Column - 2, hex.Row + 1));
+            //bottomRight
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column + 1, hex.Row + 1)), Map.Instance.GetHex(hex.Column + 2, hex.Row + 1));
+
+        }
+        else
+        {
+            //topLeft
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column - 1, hex.Row - 1)), Map.Instance.GetHex(hex.Column - 2, hex.Row - 1));
+            //topRight
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column + 1, hex.Row - 1)), Map.Instance.GetHex(hex.Column + 2, hex.Row - 1));
+            //bottomLeft
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column - 1, hex.Row)), Map.Instance.GetHex(hex.Column - 2, hex.Row + 1));
+            //bottomRight
+            AddHexesInDirection(ref specialMoves, Map.Instance.GetUnit(Map.Instance.GetHex(hex.Column + 1, hex.Row)), Map.Instance.GetHex(hex.Column + 2, hex.Row + 1));
+        }
+
+        return specialMoves;
+    }
+
+    private void AddHexesInDirection(ref List<Hex> hexes, Unit enemyUnit, Hex hex)
+    {
+        if (enemyUnit != null && enemyUnit.Team != this.Team && hex != null && hex.Walkable)
+        {
+            hexes.Add(Map.Instance.GetHex(enemyUnit.Column, enemyUnit.Row));
+        }
     }
 
     private void addToSpecialMove(Hex desiredHex, Hex betweenHex1, Hex betweenHex2)
@@ -167,12 +204,55 @@ public class Knight : Melee
     }
     public override void SetPath(Hex hex)
     {
+        if(isSpecialMove && PathFinder.InRange(Map.Instance.map[Column, Row], hex, 1))
+        {
+            Unit unit = Map.Instance.GetUnit(hex);
+            unit.SetPath(AvailableHex(hex));
+            path = PathFinder.FindPath_AStar(Map.Instance.map[Column, Row], hex);
+            Map.Instance.map[Column, Row].Walkable = true;
+            Column = hex.Column;
+            Row = hex.Row;
+            hex.Walkable = false;
+            animator.Play("Special");
+            return;
+        }
         path.Add(hex);
         Map.Instance.map[Column, Row].Walkable = true;
         Column = hex.Column;
         Row = hex.Row;
         hex.Walkable = false;
         animator.SetBool("Run", true);
+    }
+
+    private Hex AvailableHex(Hex hex)
+    {
+        if (hex.Column == Column && hex.Row == Row + 1)
+            return Map.Instance.GetHex(Column, Row + 2);
+        if (hex.Column == Column && hex.Row == Row - 1)
+            return Map.Instance.GetHex(Column, Row - 2);
+        if (Column % 2 != 0)
+        {
+            if (hex.Column == Column - 1 && hex.Row == Row)
+                return Map.Instance.GetHex(Column - 2, Row - 1);
+            if (hex.Column == Column + 1 && hex.Row == Row)
+                return Map.Instance.GetHex(Column + 2, Row - 1);
+            if (hex.Column == Column - 1 && hex.Row == Row + 1)
+                return Map.Instance.GetHex(Column - 2, Row + 1);
+            if (hex.Column == Column + 1 && hex.Row == Row + 1)
+                return Map.Instance.GetHex(Column + 2, Row + 1);
+        }
+        else
+        {
+            if (hex.Column == Column - 1 && hex.Row == Row - 1)
+                return Map.Instance.GetHex(Column - 2, Row - 1);
+            if (hex.Column == Column + 1 && hex.Row == Row - 1)
+                return Map.Instance.GetHex(Column + 2, Row - 1);
+            if (hex.Column == Column - 1 && hex.Row == Row)
+                return Map.Instance.GetHex(Column - 2, Row + 1);
+            if (hex.Column == Column + 1 && hex.Row == Row)
+                return Map.Instance.GetHex(Column + 2, Row + 1);
+        }
+        return null;
     }
 }
 
@@ -189,10 +269,11 @@ public struct SpecialMovesAttackFields
     public Unit SecondUnit { get; set; }
 
 }
-
 public class KnightLight : Knight
-{ }
+{
+}
 public class KnightDark : Knight
-{ }
+{
+}
 
 

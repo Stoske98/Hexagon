@@ -22,13 +22,15 @@ public class SpawnSwordsman : Spawner
                     GameObject = unitPrefab,
                     Team = team,
 
-                    MaxHealth = 2,
-                    CurrentHealth = 2,
+                    MaxHealth = 1,
+                    CurrentHealth = 1,
 
                     Damage = 1,
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                sl.unitType = UnitType.Swordsman;
+                sl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Swordsman");
                 sl.animator = sl.GameObject.GetComponent<Animator>();
                 return sl;
             case ClassType.Dark:
@@ -39,13 +41,15 @@ public class SpawnSwordsman : Spawner
                     GameObject = unitPrefab,
                     Team = team,
 
-                    MaxHealth = 2,
-                    CurrentHealth = 2,
+                    MaxHealth = 1,
+                    CurrentHealth = 1,
 
                     Damage = 1,
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                sd.unitType = UnitType.Swordsman;
+                sd.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Swordsman");
                 sd.animator =sd.GameObject.GetComponent<Animator>();
                 return sd;
             default:
@@ -70,13 +74,15 @@ public class SpawnTank : Spawner
 
                     Team = team,
 
-                    MaxHealth = 4,
-                    CurrentHealth = 4,
+                    MaxHealth = 3,
+                    CurrentHealth = 3,
 
                     Damage = 1,
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                tl.unitType = UnitType.Tank;
+                tl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Tank");
                 tl.animator = tl.GameObject.GetComponent<Animator>();
                 return tl;
             case ClassType.Dark:
@@ -88,13 +94,15 @@ public class SpawnTank : Spawner
 
                     Team = team,
 
-                    MaxHealth = 4,
-                    CurrentHealth = 4,
+                    MaxHealth = 3,
+                    CurrentHealth = 3,
 
                     Damage = 1,
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                td.unitType = UnitType.Tank;
+                td.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Tank");
                 td.animator = td.GameObject.GetComponent<Animator>();
                 return td;
             default:
@@ -126,6 +134,8 @@ public class SpawnQueen : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                ql.unitType = UnitType.Queen;
+                ql.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Queen");
                 ql.animator = ql.GameObject.GetComponent<Animator>();
                 return ql;
             case ClassType.Dark:
@@ -144,6 +154,8 @@ public class SpawnQueen : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                qd.unitType = UnitType.Queen;
+                qd.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Queen");
                 qd.animator = qd.GameObject.GetComponent<Animator>();
                 return qd;
             default:
@@ -167,13 +179,15 @@ public class SpawnKing : Spawner
 
                     Team = team,
 
-                    MaxHealth = 3,
-                    CurrentHealth = 3,
+                    MaxHealth = 4,
+                    CurrentHealth = 4,
 
-                    Damage = 1,
-                    AttackRange = 1,
+                    Damage = 0,
+                    AttackRange = 0,
                     attackSpeed = 0.25f
                 };
+                kl.unitType = UnitType.King;
+                kl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/King");
                 kl.animator = kl.GameObject.GetComponent<Animator>();
                 return kl;
             case ClassType.Dark:
@@ -185,13 +199,15 @@ public class SpawnKing : Spawner
 
                     Team = team,
 
-                    MaxHealth = 3,
-                    CurrentHealth = 3,
+                    MaxHealth = 4,
+                    CurrentHealth = 4,
 
-                    Damage = 1,
-                    AttackRange = 1,
+                    Damage = 0,
+                    AttackRange = 0,
                     attackSpeed = 0.25f
                 };
+                kd.unitType = UnitType.King;
+                kd.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/King");
                 kd.animator = kd.GameObject.GetComponent<Animator>();
                 return kd;
             default:
@@ -223,6 +239,8 @@ public class SpawnArcher : Spawner
                     AttackRange = 2,
                     attackSpeed = 0.25f
                 };
+                al.unitType = UnitType.Archer;
+                al.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Archer");
                 al.animator = al.GameObject.GetComponent<Animator>();
                 return al;
             case ClassType.Dark:
@@ -241,6 +259,8 @@ public class SpawnArcher : Spawner
                     AttackRange = 2,
                     attackSpeed = 0.25f
                 };
+                ad.unitType = UnitType.Archer;
+                ad.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Archer");
                 ad.animator = ad.GameObject.GetComponent<Animator>();
                 return ad;
             default:
@@ -272,6 +292,8 @@ public class SpawnWizard : Spawner
                     AttackRange = 0,
                     attackSpeed = 0.25f
                 };
+                wl.unitType = UnitType.Wizzard;
+                wl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Wizard");
                 wl.animator = wl.GameObject.GetComponent<Animator>();
                 return wl;
             case ClassType.Dark:
@@ -290,6 +312,8 @@ public class SpawnWizard : Spawner
                     AttackRange = 0,
                     attackSpeed = 0.25f
                 };
+                wd.unitType = UnitType.Wizzard;
+                wd.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Wizard");
                 wd.animator = wd.GameObject.GetComponent<Animator>();
                 return wd;
             default:
@@ -323,6 +347,8 @@ public class SpawnTrikset : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                tl.unitType = UnitType.Trikster;
+                tl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Jester");
                 tl.animator = tl.GameObject.GetComponent<Animator>();
                 return tl;
             case ClassType.Dark:
@@ -341,6 +367,8 @@ public class SpawnTrikset : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                td.unitType = UnitType.Trikster;
+                td.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Jester");
                 td.animator = td.GameObject.GetComponent<Animator>();
                 return td;
             default:
@@ -375,6 +403,8 @@ public class SpawnKnight : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                kl.unitType = UnitType.Knight;
+                kl.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Knight");
                 kl.animator = kl.GameObject.GetComponent<Animator>();
                 return kl;
             case ClassType.Dark:
@@ -393,6 +423,8 @@ public class SpawnKnight : Spawner
                     AttackRange = 1,
                     attackSpeed = 0.25f
                 };
+                kd.unitType = UnitType.Knight;
+                kd.sprite = GameManager.Instance.GetSpriteByPath("HeroesImages/HeroStats/Knight");
                 kd.animator = kd.GameObject.GetComponent<Animator>();
                 return kd;
             default:

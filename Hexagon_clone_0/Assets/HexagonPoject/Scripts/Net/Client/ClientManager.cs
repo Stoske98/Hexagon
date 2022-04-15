@@ -30,7 +30,6 @@ public class ClientManager : MonoBehaviour
     [SerializeField] ushort port;
     public InputField ip_if;
     public InputField port_if;
-    public GameObject canvas;
     public bool isTest;
     void Start()
     {
@@ -38,7 +37,9 @@ public class ClientManager : MonoBehaviour
         {
             Client.Instance.Init(ip, 27001);
             RegisterToEvent();
-            canvas.SetActive(false);
+            Manager.UIManager.Instance.canvas.enabled = false;
+            GameUiManager.Instance.canvas.enabled = true;
+            GameUiManager.Instance.connectingPanel.SetActive(false);
             GameManager.Instance.StartGame();
         }
         else
@@ -63,7 +64,12 @@ public class ClientManager : MonoBehaviour
         NetUtility.C_MAKE_MOVE_RESPONESS += OnMakeMoveResponess;
         NetUtility.C_MAKE_ATTACK_RESPONESS += OnMakeAttakcResponess;
         NetUtility.C_USE_TARGET_ABILITY_RESPONESS += OnUseTargetAbilityResponess;
-        NetUtility.C_MAKE_TRIKSTER_MOVE_RESPONESS += OnTriksetMakeMove;
+        NetUtility.C_MAKE_TRIKSTER_MOVE_RESPONESS += OnTriksetMakeMoveResponess;
+        NetUtility.C_ARCHER_SPECIAL_ABILITY_RESPONESS += OnArcherSpecialAbilityResponess;
+        NetUtility.C_REMOVE_FIELDS_RESPONESS += OnRemoveFieldsResponess;
+        NetUtility.C_ACTIVATE_KING_SPECIAL_ABILITY += OnActivateKingSpecialAbilityResponess;
+        NetUtility.C_SWORDSMAN_PASSIVE_RESPONESS += OnSwordsmanPassiveResponess;
+        NetUtility.C_CHALENGE_ROYAL_COUNTER_RESPONESS += OnChalengeRoyalResponess;
 
         //login and stuf
         NetUtility.C_CREATE_ACCOUNT_RESPONESS += OnCreateAccountResponess;
@@ -90,7 +96,12 @@ public class ClientManager : MonoBehaviour
         NetUtility.C_MAKE_MOVE_RESPONESS -= OnMakeMoveResponess;
         NetUtility.C_MAKE_ATTACK_RESPONESS -= OnMakeAttakcResponess;
         NetUtility.C_USE_TARGET_ABILITY_RESPONESS -= OnUseTargetAbilityResponess;
-        NetUtility.C_MAKE_TRIKSTER_MOVE_RESPONESS -= OnTriksetMakeMove;
+        NetUtility.C_MAKE_TRIKSTER_MOVE_RESPONESS -= OnTriksetMakeMoveResponess;
+        NetUtility.C_ARCHER_SPECIAL_ABILITY_RESPONESS -= OnArcherSpecialAbilityResponess;
+        NetUtility.C_REMOVE_FIELDS_RESPONESS -= OnRemoveFieldsResponess;
+        NetUtility.C_ACTIVATE_KING_SPECIAL_ABILITY -= OnActivateKingSpecialAbilityResponess;
+        NetUtility.C_SWORDSMAN_PASSIVE_RESPONESS -= OnSwordsmanPassiveResponess;
+        NetUtility.C_CHALENGE_ROYAL_COUNTER_RESPONESS -= OnChalengeRoyalResponess;
 
         NetUtility.C_CREATE_ACCOUNT_RESPONESS -= OnCreateAccountResponess;
         NetUtility.C_LOGIN_RESPONESS -= OnLoginResponess;
@@ -128,15 +139,41 @@ public class ClientManager : MonoBehaviour
         ClientJobSystem.UseTargetAbility(message);
     }
 
-    private void OnTriksetMakeMove(NetMessage message)
+    private void OnTriksetMakeMoveResponess(NetMessage message)
     {
         ClientJobSystem.MoveTrikset(message);
+    }
+
+    private void OnArcherSpecialAbilityResponess(NetMessage message)
+    {
+        ClientJobSystem.ArcherSpecialAbility(message);
+    }
+
+    private void OnRemoveFieldsResponess(NetMessage message)
+    {
+        ClientJobSystem.RemoveFields(message);
     }
 
     private void OnCreateAccountResponess(NetMessage message)
     {
         ClientJobSystem.LoginOnServer(message);
     }
+
+    private void OnActivateKingSpecialAbilityResponess(NetMessage message)
+    {
+        ClientJobSystem.ActivateKingSpecialAbility(message);
+    }
+
+    private void OnSwordsmanPassiveResponess(NetMessage message)
+    {
+        ClientJobSystem.SwordsmanPassive(message);
+    }
+
+    private void OnChalengeRoyalResponess(NetMessage message)
+    {
+        ClientJobSystem.ChalengeRoyalCounter(message);
+    }
+
 
     private void OnLoginResponess(NetMessage message)
     {

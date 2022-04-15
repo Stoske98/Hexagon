@@ -72,6 +72,19 @@ public class Ability : BaseAbility
 
 
     public virtual void UseAbility(Hex hex) { }
+    public virtual List<Hex> GetAbilityHexes(Hex hex)
+    {
+        List<Hex> hexes = new List<Hex>();
+        List<Hex> allHexes = PathFinder.BFS_HexesInRange(hex, this.Range);
+
+        foreach (Hex h in allHexes)
+        {
+            if (Map.Instance.GetUnit(h) != null)
+                hexes.Add(h);
+        }
+
+        return hexes;
+    }
 
 }
 

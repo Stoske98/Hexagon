@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class King : Melee
 {
-    /*private bool upgraded1;
+    private bool upgraded1;
     private bool upgraded2;
-    private bool upgraded3;*/
+    private bool upgraded3;
     //private Unit unitToAttack;
     //List<SpecialMovesAttackFields> ksmaf;
     public override List<Hex> getSpecialMoves(Hex hex)
@@ -104,11 +104,13 @@ public class King : Melee
                 {
                     if(Column == 4 && Row == 4)
                     {
-                        /*int mxh = MaxHealth;
-                        if (!upgraded3 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 8 && MaxHealth != 5) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 8 && MaxHealth != 5)))
+                        GameManager.Instance.KingActivateSpecialAbility();
+                        //int mxh = MaxHealth;
+                        if (!upgraded3 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 9 /*&& MaxHealth != 6*/) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 9 /*&& MaxHealth != 6*/)))
                         {
-                            MaxHealth = 5;
-                            CurrentHealth += MaxHealth - mxh;
+                            //MaxHealth = 6;
+                            //CurrentHealth += MaxHealth - mxh;
+                            CurrentHealth = MaxHealth;
                             Damage = 3;
                             AttackRange = 1;
                             GameManager.Instance.DestroyGameObject(healthBar.CanvasHB);
@@ -119,10 +121,11 @@ public class King : Melee
                             upgraded1 = true;
 
                         }
-                        else if(!upgraded2 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 4 && MaxHealth != 4) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 4 && MaxHealth != 4)))
+                        else if(!upgraded2 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 6 /*&& MaxHealth != 5*/) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 6 /*&& MaxHealth != 5*/)))
                         {
-                            MaxHealth = 4;
-                            CurrentHealth += MaxHealth - mxh;
+                            //MaxHealth = 5;
+                            //CurrentHealth += MaxHealth - mxh;
+                            CurrentHealth = MaxHealth;
                             Damage = 2;
                             AttackRange = 1;
                             GameManager.Instance.DestroyGameObject(healthBar.CanvasHB);
@@ -131,15 +134,18 @@ public class King : Melee
                             upgraded2 = true;
                             upgraded1 = true;
                         }
-                        else if (!upgraded1 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 3 && MaxHealth == 3) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 3 && MaxHealth == 3)))
+                        else if (!upgraded1 && ((Team == 0 && GameManager.Instance.deadP1Units.Count >= 3 /*&& MaxHealth == 4*/) || (Team == 1 && GameManager.Instance.deadP2Units.Count >= 3 /*&& MaxHealth == 4*/)))
                         {
+                            //MaxHealth = 4;
+                            //CurrentHealth += MaxHealth - mxh;
+                            CurrentHealth = MaxHealth;
                             Damage = 1;
                             AttackRange = 1;
                             GameManager.Instance.DestroyGameObject(healthBar.CanvasHB);
                             healthBar = new HealthBar(GameManager.Instance.CanvasHBPrefab, GameManager.Instance.HealthImagePrefab);
                             InitializeHealthBar();
                             upgraded1 = true;
-                        }*/
+                        }
                     }
                     animator.SetBool("Run", false);
                 }

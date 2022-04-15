@@ -42,9 +42,11 @@ public class Unit
     public int CurrentHealth;
     public int Damage;
     public int AttackRange;
+    public Sprite sprite;
 
     public GameObject GameObject;
     public UnitState currentState = UnitState.None;
+    public UnitType unitType;
     public List<Hex> path;
     public List<Hex> availableMoves;
     public List<Hex> specialMoves;
@@ -111,7 +113,11 @@ public class Unit
                 }
                 else
                 {
-                    animator.SetBool("Run", false);
+
+                    if (animator.GetBool("Run"))
+                    {
+                        animator.SetBool("Run", false);
+                    }
                 }
             }
         }
@@ -223,9 +229,13 @@ public class Unit
             CurrentHealth -= damage;
         else
         {
-            isDeath = true;
-            animator.SetBool("Death", true);
-            GameManager.Instance.OnUnitDeath(3f,this);
+            if(Column != -1 && Row != -1)
+            {
+                isDeath = true;
+                animator.SetBool("Death", true);
+                GameManager.Instance.OnUnitDeath(3f,this);
+                GameUiManager.Instance.UpdateTopBarStatus(this);
+            }
         }
            
     }

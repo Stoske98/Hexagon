@@ -13,6 +13,11 @@ public enum OpCode
     MAKE_ATTACK = 5,
     USE_TARGET_ABILITY = 6,
     MAKE_TRIKSTER_MOVE = 7,
+    ARCHER_SPECIAL_ABILITY = 8, 
+    REMOVE_FIELDS = 9,
+    ACTIVATE_KING_SPECIAL_ABILITY = 10,
+    SWORDSMAN_PASSIVE = 11,
+    CHALENGE_ROYAL_COUNTER = 12,
 
     CREATE_ACCOUNT = 101,
     LOGIN = 102,
@@ -96,6 +101,21 @@ public static class NetUtility
             case OpCode.ACCEPT_MATCH:
                 msg = new NetAcceptMatch(reader);
                 break;
+            case OpCode.ARCHER_SPECIAL_ABILITY:
+                msg = new NetArcherSpecialAbility(reader);
+                break;
+            case OpCode.REMOVE_FIELDS:
+                msg = new NetRemoveFields(reader);
+                break;
+            case OpCode.ACTIVATE_KING_SPECIAL_ABILITY:
+                msg = new NetActivateKingSpecialAbility(reader);
+                break;
+            case OpCode.SWORDSMAN_PASSIVE:
+                msg = new NetSwordsmanPassive(reader);
+                break;
+            case OpCode.CHALENGE_ROYAL_COUNTER:
+                msg = new NetChalengeRoyalCounter(reader);
+                break;
             default:
                 Debug.Log("Message received had no OpCode");
                 break;
@@ -126,4 +146,9 @@ public static class NetUtility
     public static Action<NetMessage> C_MATCH_FOUND_RESPONESS;
     public static Action<NetMessage> C_CANCEL_MATCH_FINDING_RESPONESS;
     public static Action<NetMessage> C_ACCEPT_MATCH_RESPONESS;
+    public static Action<NetMessage> C_ARCHER_SPECIAL_ABILITY_RESPONESS;
+    public static Action<NetMessage> C_REMOVE_FIELDS_RESPONESS;
+    public static Action<NetMessage> C_ACTIVATE_KING_SPECIAL_ABILITY;
+    public static Action<NetMessage> C_SWORDSMAN_PASSIVE_RESPONESS;
+    public static Action<NetMessage> C_CHALENGE_ROYAL_COUNTER_RESPONESS;
 }

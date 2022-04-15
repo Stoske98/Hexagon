@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 2
+  version: 11
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -21,14 +21,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CenterCurveSimple_01_Example
-  m_Shader: {fileID: -6465566751694194690, guid: 23514104079acab47a8589c480f3b606,
-    type: 3}
-  m_ShaderKeywords: _BLENDMODE_ALPHA _DOUBLESIDED_ON _ENABLE_FOG_ON_TRANSPARENT _FRESNELMASKENABLED_ON
+  m_Shader: {fileID: -6465566751694194690, guid: 23514104079acab47a8589c480f3b606, type: 3}
+  m_ShaderKeywords: _DOUBLESIDED_ON _ENABLE_FOG_ON_TRANSPARENT _FRESNELMASKENABLED_ON
     _RAMPENABLED_ON _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap:
     MotionVector: User
     RenderType: Transparent
@@ -112,23 +111,41 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
     - _BlendMode: 0
     - _CameraDepthFadeEnabled: 1
     - _CameraDepthFadeLength: 1
     - _CameraDepthFadeOffset: 0
     - _CullMode: 0
     - _CullModeForward: 0
+    - _DepthOffsetEnable: 0
     - _DissolveTextureRemapMax: 0.75
     - _DissolveTextureScaleU: 1
     - _DissolveTextureScaleV: 1
     - _DoubleSidedEnable: 1
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
+    - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
     - _FRESNELMASKENABLED: 1
     - _FinalOpacityExp: 1
@@ -158,13 +175,14 @@ Material:
     - _Noise01ScaleV: 1
     - _Noise01ScrollSpeed: 0
     - _OpacityPower: 2
+    - _OpaqueCullMode: 2
     - _RAMPAFFECTEDBYVERTEXCOLOR: 0
     - _RAMPENABLED: 1
     - _RampOffsetExp: 2
     - _RampOffsetMultiply: 4
     - _RampTilingPower: 4
     - _ReceivesSSR: 0
-    - _RenderQueueType: 5
+    - _RenderQueueType: 4
     - _RequireSplitLighting: 0
     - _SECONDMASKFLIPANIMATION: 0
     - _SECONDMASKFLIPUV: 0
@@ -200,6 +218,7 @@ Material:
     - _TransparentDepthPostpassEnable: 0
     - _TransparentDepthPrepassEnable: 0
     - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 4
@@ -214,3 +233,4 @@ Material:
     - _MainMaskChannelsAdd: {r: 0, g: 0, b: 1, a: 1}
     - _MainMaskChannelsMultiply: {r: 1, g: 1, b: 0, a: 0}
     - _RampColorTint: {r: 0.31617588, g: 0.7170386, b: 1, a: 1}
+  m_BuildTextureStacks: []

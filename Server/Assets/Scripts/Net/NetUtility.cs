@@ -12,6 +12,12 @@ public enum OpCode
     MAKE_ATTACK = 5,
     USE_TARGET_ABILITY = 6,
     MAKE_TRIKSTER_MOVE = 7,
+    ARCHER_SPECIAL_ABILITY = 8,
+    REMOVE_FIELDS = 9,
+    ACTIVATE_KING_SPECIAL_ABILITY = 10,
+    SWORDSMAN_PASSIVE = 11,
+    CHALENGE_ROYAL_COUNTER = 12,
+
 }
 public static class NetUtility
 {
@@ -43,6 +49,21 @@ public static class NetUtility
             case OpCode.MAKE_TRIKSTER_MOVE:
                 msg = new NetTriksterIlluMakeMove(reader);
                 break;
+            case OpCode.ARCHER_SPECIAL_ABILITY:
+                msg = new NetArcherSpecialAbility(reader);
+                break;
+            case OpCode.REMOVE_FIELDS:
+                msg = new NetRemoveFields(reader);
+                break;
+            case OpCode.ACTIVATE_KING_SPECIAL_ABILITY:
+                msg = new NetActivateKingSpecialAbility(reader);
+                break;
+            case OpCode.SWORDSMAN_PASSIVE:
+                msg = new NetSwordsmanPassive(reader);
+                break;
+            case OpCode.CHALENGE_ROYAL_COUNTER:
+                msg = new NetChalengeRoyalCounter(reader);
+                break;
             default:
                 Debug.Log("Message received had no OpCode");
                 break;
@@ -60,4 +81,9 @@ public static class NetUtility
     public static Action<NetMessage, NetworkConnection> S_MAKE_ATTACK_REQUEST;
     public static Action<NetMessage, NetworkConnection> S_USE_TARGET_ABILITY_REQUEST;
     public static Action<NetMessage, NetworkConnection> S_MAKE_TRIKSER_MOVE_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_ARCHER_SPECIAL_ABILITY_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_REMOVE_FIELDS_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_AKTIVATE_KING_SPECIAL_ABILITY_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_SWORDSMAN_PASSIVE_REQUEST;
+    public static Action<NetMessage, NetworkConnection> S_CHALENGE_ROYAL_COUTNER_REQUEST;
 }

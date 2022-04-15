@@ -9,7 +9,7 @@ public static class ClientJobSystem
     //RECIEVE FROM SERVER
     public static void Welcome(NetMessage message)
     {
-        NetWelcome responess = message as NetWelcome;
+        NetWelcome responess = message as NetWelcome;    
         GameManager.Instance.currentTeam = responess.AssignedTeam;
     }
     public static void MoveTrikset(NetMessage message)
@@ -58,11 +58,13 @@ public static class ClientJobSystem
                 {
                     unit.isSpecialMove = true;
                     unit.SetPath(desiredHex);
+                    Debug.Log(unit.Team + " player: " + GameManager.Instance.currentTeam);
                     GameManager.Instance.InvokeEndTurn();
                 }
                 else if (GameManager.Instance.availableMoves.Contains(desiredHex))
                 {
                     unit.SetPath(desiredHex);
+                    Debug.Log(unit.Team + " player: " + GameManager.Instance.currentTeam);
                     GameManager.Instance.InvokeEndTurn();
                 }
                 
@@ -124,6 +126,64 @@ public static class ClientJobSystem
         }
     }
 
+    internal static void ArcherSpecialAbility(NetMessage message)
+    {
+        NetArcherSpecialAbility responess = message as NetArcherSpecialAbility;
+        if(responess.Archer1Column != -1 && responess.Archer1Row != -1)
+        {
+            //find archer and activate special
+            Unit unit = Map.Instance.GetUnit(Map.Instance.GetHex(responess.Archer1Column, responess.Archer1Row));
+            if(unit != null)
+            {
+                Archer archer = unit as Archer;
+                archer.ActivateArcherPassive();
+                Debug.Log(unit.Column + " , " + unit.Row + ": AR : " + unit.AttackRange);
+            }
+
+           // Debug.Log(unit.Column + " , " + unit.Row  +": AR : " + unit.AttackRange);
+        }
+
+        if (responess.Archer2Column != -1 && responess.Archer2Row != -1)
+        {
+            Unit unit = Map.Instance.GetUnit(Map.Instance.GetHex(responess.Archer2Column, responess.Archer2Row));
+            if (unit != null)
+            {
+                Archer archer = unit as Archer;
+                archer.ActivateArcherPassive();
+                Debug.Log(unit.Column + " , " + unit.Row + ": AR : " + unit.AttackRange);
+            }
+            //find archer and activate special
+            // Debug.Log(unit.Column + " , " + unit.Row + ": AR : " + unit.AttackRange);
+        }
+
+    }
+
+    internal static void ChalengeRoyalCounter(NetMessage message)
+    {
+        NetChalengeRoyalCounter responess = message as NetChalengeRoyalCounter;
+        GameUiManager.Instance.UpdateChalengeRoyal();
+    }
+
+    internal static void SwordsmanPassive(NetMessage message)
+    {
+        NetSwordsmanPassive responess = message as NetSwordsmanPassive;
+        GameManager.Instance.SwordsmanPassive(responess.Team);
+       // Debug.Log("Swordsman passive from team " + responess.Team);
+    }
+
+    internal static void ActivateKingSpecialAbility(NetMessage message)
+    {
+        NetActivateKingSpecialAbility responess = message as NetActivateKingSpecialAbility;
+        GameUiManager.Instance.chalengeRoyalGO.SetActive(true);
+        GameManager.Instance.ActivateKingSpecialAbility(responess.onMove);
+    }
+
+    internal static void RemoveFields(NetMessage message)
+    {
+        NetRemoveFields responess = message as NetRemoveFields;
+        GameManager.Instance.RemoveFields();
+    }
+
     public static void UseTargetAbility(NetMessage message)
     {
         NetTargetAbility responess = message as NetTargetAbility;
@@ -164,6 +224,7 @@ public static class ClientJobSystem
         //ispisi kreiran account
         UIManager.Instance.sincdata_panel.SetActive(false);
         UIManager.Instance.main_menu.SetActive(true);
+        UIManager.Instance.SetPlayerInfo(responess.nickname, responess.rank);
         Debug.Log("Account created");
     }
 
@@ -177,6 +238,7 @@ public static class ClientJobSystem
         //ispisi kreiran account
         UIManager.Instance.sincdata_panel.SetActive(false);
         UIManager.Instance.main_menu.SetActive(true);
+        UIManager.Instance.SetPlayerInfo(responess.nickname, responess.rank);
         Debug.Log("Account Exist");
     }
 
@@ -289,5 +351,47 @@ public static class ClientJobSystem
         request.userID = userID;
         Client.Instance.SendToServer(request);
 
+    }
+
+    public static void ArcherSpecialAbilityRequest(Unit archer1, Unit archer2)
+    {
+        NetArcherSpecialAbility request = new NetArcherSpecialAbility();
+        if(archer1 != null)
+        {
+            request.Archer1Column = archer1.Column;
+            request.Archer1Row = archer1.Row;
+        }
+        if(archer2 != null)
+        {
+            request.Archer2Column = archer2.Column;
+            request.Archer2Row = archer2.Row;
+        }
+        Client.Instance.SendToServer(request);
+    }
+
+    public static void RemoveFields()
+    {
+        NetRemoveFields request = new NetRemoveFields();
+        Client.Instance.SendToServer(request);
+    }
+
+    public static void ActivateKingSpecialAbility(int move)
+    {
+        NetActivateKingSpecialAbility request = new NetActivateKingSpecialAbility();
+        request.onMove = move;
+        Client.Instance.SendToServer(request);
+    }
+
+    public static void SwordsmanPassive()
+    {
+        NetSwordsmanPassive request = new NetSwordsmanPassive();
+        request.Team = GameManager.Instance.currentTeam;
+        Client.Instance.SendToServer(request);
+    }
+
+    public static void ChalengeRoyalCounter()
+    {
+        NetChalengeRoyalCounter request = new NetChalengeRoyalCounter();
+        Client.Instance.SendToServer(request);
     }
 }

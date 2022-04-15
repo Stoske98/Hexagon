@@ -12,7 +12,7 @@ public class Melee : Unit
             int enemyColumn = EnemyUnit.Column;
             int enemyRow = EnemyUnit.Row;
             EnemyUnit.RecieveDamage(Damage);
-            if (EnemyUnit.isDeath)
+            if (EnemyUnit.isDeath && enemyColumn != -1 && enemyRow != -1)
                 SetPath(Map.Instance.GetHex(enemyColumn, enemyRow));
             EnemyUnit = null;
             animator.SetBool("Attack", false);

@@ -68,22 +68,24 @@ public class Matchmaking : MonoBehaviour
         if(responess.Answer == 0)
         {
             // match is declined
-            UIManager.Instance.matchButton.start = !UIManager.Instance.matchButton.start;
+            //UIManager.Instance.matchButton.start = !UIManager.Instance.matchButton.start;
             UIManager.Instance.accept_decline.SetActive(false);
             UIManager.Instance.match_has_declined.SetActive(true);
             UIManager.Instance.match_waiting.SetActive(false);
-            UIManager.Instance.match_finding_anim.Play("Normal");
+            //UIManager.Instance.match_finding_anim.Play("Normal");
             Invoke("HideGameObject",2f);
             Debug.Log("Match is declined");
         }
         else
         {
-            UIManager.Instance.matchButton.start = !UIManager.Instance.matchButton.start;
+            //UIManager.Instance.matchButton.start = !UIManager.Instance.matchButton.start;
             UIManager.Instance.match_has_accepted.SetActive(true);
             UIManager.Instance.match_waiting.SetActive(false);
-            UIManager.Instance.match_finding_anim.Play("Normal");
+            //UIManager.Instance.match_finding_anim.Play("Normal")
             Client.Instance.ShutDown();
-            UIManager.Instance.canvas.SetActive(false);
+            //SetActive(false);
+            Manager.UIManager.Instance.canvas.enabled = false;
+            GameUiManager.Instance.canvas.enabled = true;
             GameManager.Instance.StartGame();
             Client.Instance.Init(ClientManager.Instance.ip, Convert.ToUInt16(responess.Port));
             Debug.Log("Both player accepted match");

@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     public List<Unit> deadP1Units = new List<Unit>();
     [HideInInspector]
     public List<Unit> deadP2Units = new List<Unit>();
-    private Unit selectedUnit;
+    public Unit selectedUnit;
     private bool isPlayer1Turn = true;
     private Unit hitUnit = null;
     private Unit currentHoverUnit = null;
@@ -55,11 +55,13 @@ public class GameManager : MonoBehaviour
     public List<Hex> availableMoves = new List<Hex>();
     public List<Hex> specialMoves = new List<Hex>();
     public List<Hex> attackMoves = new List<Hex>();
+    public List<Hex> abilityHexes = new List<Hex>();
 
     //Color
     public Color hoverColor;
     public Color movesColor;
     public Color specialMovesColor;
+    public Color abilityColor;
 
     //Projectil
     public GameObject projectilPrefab;
@@ -69,10 +71,14 @@ public class GameManager : MonoBehaviour
     //Game rule
     [HideInInspector]
     public int numberOfMoves = 1;
+    private bool kingOnCentar = false;
+    private int moveWhenKingStepOnCenter;
+    private int outerFields = 4;
 
     //Camera
     [SerializeField] public GameObject[] cameraAngles;
     private int cameraIndex = -1;
+    public CameraController cameraController;
     // Multiplayer logic
     [HideInInspector]
     public int currentTeam = -1;
@@ -86,9 +92,13 @@ public class GameManager : MonoBehaviour
 
     private bool TargetableAbilityActive = false;
     private KeyCode KeyCode;
-    private bool ifMapIsCreated;
+    private bool IsMapCreated;
+
+    public Text txt_moves;
+
     void Start()
     {
+        selected_class = -1;
     }
     public void StartGame()
     {
@@ -105,12 +115,12 @@ public class GameManager : MonoBehaviour
             unit.healthBar = new HealthBar(CanvasHBPrefab, HealthImagePrefab);
             unit.InitializeHealthBar();
         }
-        ifMapIsCreated = true;
+        IsMapCreated = true;
     }
     // Update is called once per frame
     void Update()
     {
-        if(ifMapIsCreated)
+        if(IsMapCreated)
         {
             Raycast();
             UpdateUnits();
@@ -148,6 +158,8 @@ public class GameManager : MonoBehaviour
                 {
                     case AbilityType.Targetable:
                         RemoveHighlightHexes();
+                        abilityHexes = selectedUnit.ability1.GetAbilityHexes(Map.Instance.GetHex(selectedUnit.Column, selectedUnit.Row));
+                        HighlightAbilityMoves();
                         KeyCode = KeyCode.Q;
                         TargetableAbilityActive = true;
                         break;
@@ -163,6 +175,8 @@ public class GameManager : MonoBehaviour
                 {
                     case AbilityType.Targetable:
                         RemoveHighlightHexes();
+                        abilityHexes = selectedUnit.ability2.GetAbilityHexes(Map.Instance.GetHex(selectedUnit.Column, selectedUnit.Row));
+                        HighlightAbilityMoves();
                         KeyCode = KeyCode.W;
                         TargetableAbilityActive = true;
                         break;
@@ -181,9 +195,11 @@ public class GameManager : MonoBehaviour
                 {
                     case KeyCode.Q:
                         UseTargetAbility(selectedUnit, Map.Instance.GetUnit(hitHex), selectedUnit.Team, 1, selectedUnit.ability1);
+                        RemoveHighlightHexes();
                         break;
                     case KeyCode.W:
                         UseTargetAbility(selectedUnit, Map.Instance.GetUnit(hitHex), selectedUnit.Team, 2, selectedUnit.ability2);
+                        RemoveHighlightHexes();
                         break;
                         /*case KeyCode.P:
                             UseTargetAbility(selectedUnit, Map.Instance.GetUnit(hitHex), selectedUnit.Team, 1, selectedUnit.ability1);
@@ -196,6 +212,10 @@ public class GameManager : MonoBehaviour
             {
                 KeyCode = KeyCode.None;
                 TargetableAbilityActive = false;
+                RemoveHighlightHexes();
+                HighlightHexes();
+
+
             }
             return;
         }
@@ -227,6 +247,7 @@ public class GameManager : MonoBehaviour
             ability.UseAbility(hitHex);
             ability.CoolDown = ability.MaxCooldown;
             EndTurn();
+            //Invoke("SwordsmanPassive", EndMoveTimer);
             KeyCode = KeyCode.None;
             TargetableAbilityActive = false;
         }
@@ -240,6 +261,7 @@ public class GameManager : MonoBehaviour
             ClientJobSystem.AttackUnitRequst(selectedUnit, enemyUnit, selectedUnit.Team);
             selectedUnit.Attack(enemyUnit);
             EndTurn();
+           // Invoke("SwordsmanPassive", EndMoveTimer);
             RemoveHighlightHexes();
         }
 
@@ -288,6 +310,7 @@ public class GameManager : MonoBehaviour
         if (selectedUnit != null)
         {
             //show stats
+            GameUiManager.Instance.ShowUnitStats(selectedUnit);
             if (selectedUnit.Team == 0 && isPlayer1Turn && currentTeam == 0 || selectedUnit.Team == 1 && !isPlayer1Turn && currentTeam == 1)
                 GetAllPossibilities();
             else
@@ -358,19 +381,30 @@ public class GameManager : MonoBehaviour
             // units.Add(new SpawnSwordsman().spawnUnit(0, 2, spawnUnit(UnitType.Swordsman, 0, 2), player1));
             //units.Add(new SpawnTank().spawnUnit(4, 2, spawnUnit(UnitType.Tank, 4, 2, unitsPrefabs), team, type));
             //units.Add(new SpawnSwordsman().spawnUnit(4, 2, spawnUnit(UnitType.Swordsman, 4, 2,  unitsPrefabs), team));
-            units.Add(new SpawnSwordsman().spawnUnit(4, 2, spawnUnit(UnitType.Swordsman, 4, 2, unitsPrefabs), team, type));
-            units.Add(new SpawnTank().spawnUnit(2, 2, spawnUnit(UnitType.Tank, 2, 2, unitsPrefabs), team, type));
-            units.Add(new SpawnTank().spawnUnit(6, 2, spawnUnit(UnitType.Tank, 6, 2,  unitsPrefabs), team, type));
+            //units.Add(new SpawnSwordsman().spawnUnit(4, 2, spawnUnit(UnitType.Swordsman, 4, 2, unitsPrefabs), team, type));
+
+            //units.Add(new SpawnTank().spawnUnit(2, 2, spawnUnit(UnitType.Tank, 2, 2, unitsPrefabs), team, type));
+          //  units.Add(new SpawnTank().spawnUnit(6, 2, spawnUnit(UnitType.Tank, 6, 2,  unitsPrefabs), team, type));
             // units.Add(new SpawnSwordsman().spawnUnit(8, 2, spawnUnit(UnitType.Swordsman, 8, 2), player1));
 
             units.Add(new SpawnKnight().spawnUnit(6, 1, spawnUnit(UnitType.Knight, 6, 1, unitsPrefabs), team, type));
             units.Add(new SpawnKnight().spawnUnit(2, 1, spawnUnit(UnitType.Knight, 2, 1, unitsPrefabs), team, type));
 
-            units.Add(new SpawnSwordsman().spawnUnit(5, 1, spawnUnit(UnitType.Swordsman, 5, 1, unitsPrefabs), team, type));
+            /*units.Add(new SpawnSwordsman().spawnUnit(5, 1, spawnUnit(UnitType.Swordsman, 5, 1, unitsPrefabs), team, type));
             units.Add(new SpawnSwordsman().spawnUnit(3, 1, spawnUnit(UnitType.Swordsman, 3, 1, unitsPrefabs), team, type));
 
+
+            units.Add(new SpawnArcher().spawnUnit(1, 1, spawnUnit(UnitType.Archer, 1, 1, unitsPrefabs), team, type));
+            units.Add(new SpawnArcher().spawnUnit(7, 1, spawnUnit(UnitType.Archer, 7, 1, unitsPrefabs), team, type));*/
+
+            //d
+            units.Add(new SpawnTank().spawnUnit(3, 1, spawnUnit(UnitType.Tank, 3, 1, unitsPrefabs), team, type));
+            units.Add(new SpawnTank().spawnUnit(5, 1, spawnUnit(UnitType.Tank, 5, 1, unitsPrefabs), team, type));
             units.Add(new SpawnArcher().spawnUnit(1, 1, spawnUnit(UnitType.Archer, 1, 1, unitsPrefabs), team, type));
             units.Add(new SpawnArcher().spawnUnit(7, 1, spawnUnit(UnitType.Archer, 7, 1, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(4, 2, spawnUnit(UnitType.Swordsman, 4, 2, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(2, 2, spawnUnit(UnitType.Swordsman, 2, 2, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(6, 2, spawnUnit(UnitType.Swordsman, 6, 2, unitsPrefabs), team, type));
         }
         else
         {
@@ -382,20 +416,29 @@ public class GameManager : MonoBehaviour
 
             //units.Add(new SpawnSwordsman().spawnUnit(0, 6, spawnUnit(UnitType.Swordsman, 0, 6), player2));
             //units.Add(new SpawnTank().spawnUnit(4, 6, spawnUnit(UnitType.Tank, 4, 6, unitsPrefabs), team, type));
-            units.Add(new SpawnSwordsman().spawnUnit(4, 6, spawnUnit(UnitType.Swordsman, 4, 6,  unitsPrefabs), team, type));
+            //units.Add(new SpawnSwordsman().spawnUnit(4, 6, spawnUnit(UnitType.Swordsman, 4, 6,  unitsPrefabs), team, type));
 
-            units.Add(new SpawnTank().spawnUnit(2, 6, spawnUnit(UnitType.Tank, 2, 6, unitsPrefabs), team, type));
-            units.Add(new SpawnTank().spawnUnit(6, 6, spawnUnit(UnitType.Tank, 6, 6,  unitsPrefabs), team, type));
+           // units.Add(new SpawnTank().spawnUnit(2, 6, spawnUnit(UnitType.Tank, 2, 6, unitsPrefabs), team, type));
+           // units.Add(new SpawnTank().spawnUnit(6, 6, spawnUnit(UnitType.Tank, 6, 6,  unitsPrefabs), team, type));
             //units.Add(new SpawnSwordsman().spawnUnit(8, 6, spawnUnit(UnitType.Swordsman, 8, 6), player2));
 
             units.Add(new SpawnKnight().spawnUnit(6, 7, spawnUnit(UnitType.Knight, 6, 7, unitsPrefabs), team, type));
             units.Add(new SpawnKnight().spawnUnit(2, 7, spawnUnit(UnitType.Knight, 2, 7, unitsPrefabs), team, type));
 
-            units.Add(new SpawnSwordsman().spawnUnit(5, 6, spawnUnit(UnitType.Swordsman, 5, 6, unitsPrefabs), team, type));
-            units.Add(new SpawnSwordsman().spawnUnit(3, 6, spawnUnit(UnitType.Swordsman, 3, 6, unitsPrefabs), team, type));
+            /* units.Add(new SpawnSwordsman().spawnUnit(5, 6, spawnUnit(UnitType.Swordsman, 5, 6, unitsPrefabs), team, type));
+             units.Add(new SpawnSwordsman().spawnUnit(3, 6, spawnUnit(UnitType.Swordsman, 3, 6, unitsPrefabs), team, type));
 
+             units.Add(new SpawnArcher().spawnUnit(1, 6, spawnUnit(UnitType.Archer, 1, 6, unitsPrefabs), team, type));
+             units.Add(new SpawnArcher().spawnUnit(7, 6, spawnUnit(UnitType.Archer, 7, 6, unitsPrefabs), team, type));*/
+
+            //d
+            units.Add(new SpawnTank().spawnUnit(3, 6, spawnUnit(UnitType.Tank, 3, 6, unitsPrefabs), team, type));
+            units.Add(new SpawnTank().spawnUnit(5, 6, spawnUnit(UnitType.Tank, 5, 6, unitsPrefabs), team, type));
             units.Add(new SpawnArcher().spawnUnit(1, 6, spawnUnit(UnitType.Archer, 1, 6, unitsPrefabs), team, type));
             units.Add(new SpawnArcher().spawnUnit(7, 6, spawnUnit(UnitType.Archer, 7, 6, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(2, 6, spawnUnit(UnitType.Swordsman, 2, 6, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(4, 6, spawnUnit(UnitType.Swordsman, 4, 6, unitsPrefabs), team, type));
+            units.Add(new SpawnSwordsman().spawnUnit(6, 6, spawnUnit(UnitType.Swordsman, 6, 6, unitsPrefabs), team, type));
         }
     }
     public GameObject spawnUnit(UnitType type, int column, int row, GameObject[] units)
@@ -416,49 +459,137 @@ public class GameManager : MonoBehaviour
         ++numberOfMoves;
         CleanCC();
         isPlayer1Turn = !isPlayer1Turn;
-
-
-        /*foreach (Swordsman swordsman in GetSwordsmans())
-        {
-            swordsman.PassiveAttack();
-        }*/
-    }
-
-    public List<Swordsman> GetSwordsmans()
+        CleanArcherSpecial();
+        UpdateMoves();
+    } 
+     
+    public void SwordsmanPassive(int team)
     {
         List<Swordsman> swordsmens = new List<Swordsman>();
-        if(numberOfMoves % 2 == 0)
+        foreach (Unit unit in units)
         {
-            foreach (Unit unit in units)
+            if (unit.GetType().IsSubclassOf(typeof(Swordsman)) && unit.Team == team)
             {
-                if(unit.GetType().IsSubclassOf(typeof(Swordsman)) && unit.Team == 0)
-                {
-                    if (!unit.isDeath)
-                        swordsmens.Add(unit as Swordsman);
-                }
+                if (!unit.isDeath)
+                    swordsmens.Add(unit as Swordsman);
             }
         }
-        else
+        foreach (Swordsman swordsman in swordsmens)
         {
-            foreach (Unit unit in units)
-            {
-                if (unit.GetType().IsSubclassOf(typeof(Swordsman)) && unit.Team == 1)
-                {
-                    if (!unit.isDeath)
-                        swordsmens.Add(unit as Swordsman);
-                }
-            }
+           // Debug.Log("Swordsman team: " + swordsman.Team + "\n postion: " + swordsman.Column + "," + swordsman.Row);
+            swordsman.PassiveAttack();
         }
-        return swordsmens;
+
+    }
+
+    private void SwordsmanPassiveSendToServer()
+    {
+        ClientJobSystem.SwordsmanPassive();
     }
 
     public void InvokeEndTurn()
     {
         Invoke("EndTurn", EndMoveTimer);
+        Invoke("SwordsmanPassiveSendToServer", EndMoveTimer);
+        Invoke("CheckForAcrhcerSpecialAbility", EndMoveTimer);
+        Invoke("CheckToRemoveFields", EndMoveTimer);
         Invoke("GetAllPossibilities", EndMoveTimer);
         Invoke("AbilityCDController", EndMoveTimer);
+        
     }
 
+    private void CleanArcherSpecial()
+    {
+            foreach (Unit unit in units)
+            {
+                if (unit.GetType().IsSubclassOf(typeof(Archer)))
+                {
+                    Archer archer = unit as Archer;
+                    if (!archer.isDeath && archer.passive)
+                    {
+                        archer.DeactivateArcherPassive();
+                    }
+                }
+            }
+    }
+
+    private void CheckForAcrhcerSpecialAbility()
+    {
+        Unit[] archers = new Unit[2];
+        foreach (Unit archer in units)
+        {
+            if (archer.GetType().IsSubclassOf(typeof(Archer)))
+            {
+                if (!archer.isDeath && archer.Team == currentTeam && archer.Column != -1 && archer.Row != -1)
+                    if (archers[0] == null)
+                        archers[0] = archer;
+                    else
+                    {
+                        archers[1] = archer;
+                        break;
+                    }
+            }
+        }
+        ClientJobSystem.ArcherSpecialAbilityRequest(archers[0], archers[1]);
+    }
+
+    public void KingActivateSpecialAbility()
+    {
+        if(!kingOnCentar)
+        {
+            ClientJobSystem.ActivateKingSpecialAbility(numberOfMoves - 1);
+        }
+    }
+
+    public void ActivateKingSpecialAbility(int nom)
+    {
+        moveWhenKingStepOnCenter = nom;
+        kingOnCentar = true;
+    }
+
+    private void CheckToRemoveFields()
+    {
+        if(kingOnCentar)
+        {
+            if ((numberOfMoves - moveWhenKingStepOnCenter) == 10 || (numberOfMoves - moveWhenKingStepOnCenter) == 20 || (numberOfMoves - moveWhenKingStepOnCenter) == 30)
+            {
+                ClientJobSystem.RemoveFields();
+            }
+            ClientJobSystem.ChalengeRoyalCounter();
+        }
+    }
+
+    public void RemoveFields()
+    {
+        ReduceNumberOfFields(outerFields, outerFields - 1);
+        outerFields--;
+    }
+
+    public void UpdateMoves()
+    {
+        txt_moves.text = numberOfMoves.ToString();
+    }
+    private void ReduceNumberOfFields(int of, int inerFields)
+    {
+        List<Hex> of_hexes = PathFinder.BFS_HexesInRange(Map.Instance.GetHex(4, 4), of);
+        List<Hex> if_hexes = PathFinder.BFS_HexesInRange(Map.Instance.GetHex(4, 4), inerFields);
+        foreach (Hex hex in if_hexes)
+        {
+            if (of_hexes.Contains(hex))
+                of_hexes.Remove(hex);
+        }
+
+        foreach (Hex h in of_hexes)
+        {
+            Unit unit = Map.Instance.GetUnit(h);
+            if(unit != null)
+            {
+                unit.RecieveDamage(unit.CurrentHealth);
+            }
+            h.Walkable = false;
+            h.GameObject.SetActive(false);
+        }
+    }
 
     private void CleanCC()
     {
@@ -495,7 +626,12 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void HighlightAbilityMoves()
+    {
+        for (int i = 0; i < abilityHexes.Count; i++)
+            map[abilityHexes[i].Column, abilityHexes[i].Row].Highlight(abilityColor);
 
+    }
     private void HighlightHexes()
     {
         for (int i = 0; i < availableMoves.Count; i++)
@@ -504,6 +640,7 @@ public class GameManager : MonoBehaviour
             map[attackMoves[i].Column, attackMoves[i].Row].Highlight(Color.red);
         for (int i = 0; i < specialMoves.Count; i++)
             map[specialMoves[i].Column, specialMoves[i].Row].Highlight(specialMovesColor);
+
         map[selectedHex.Column, selectedHex.Row].Highlight(Color.green);
     }
     private void RemoveHighlightHexes()
@@ -523,6 +660,11 @@ public class GameManager : MonoBehaviour
             map[specialMoves[i].Column, specialMoves[i].Row].isHighligted = false;
             map[specialMoves[i].Column, specialMoves[i].Row].resetColor();
         }
+        for (int i = 0; i < abilityHexes.Count; i++)
+        {
+            map[abilityHexes[i].Column, abilityHexes[i].Row].isHighligted = false;
+            map[abilityHexes[i].Column, abilityHexes[i].Row].resetColor();
+        }
         if (selectedHex != null)
         {
             map[selectedHex.Column, selectedHex.Row].isHighligted = false;
@@ -532,6 +674,7 @@ public class GameManager : MonoBehaviour
         attackMoves.Clear();
         specialMoves.Clear();
         availableMoves.Clear();
+        abilityHexes.Clear();
     }
 
     private void UpdateUnits()
@@ -565,7 +708,7 @@ public class GameManager : MonoBehaviour
 
     public void OnUnitDeath(float time, Unit unit)
     {
-        if (selectedUnit == unit && selectedUnit.Team == currentTeam)
+        if (selectedUnit == unit)
             RemoveHighlightHexes();
         map[unit.Column, unit.Row].Walkable = true;
         unit.healthBar.CanvasHB.SetActive(false);
@@ -573,14 +716,51 @@ public class GameManager : MonoBehaviour
         unit.Row = -1;
         StartCoroutine(UnitDeathTimer(time, unit));
     }
+    
 
     public void ChangeCamera()
     {
+        if (currentTeam == 0)
+        {
+            foreach (Unit unit in Instance.units)
+            {
+                KingLight kl = unit as KingLight;
+                if (kl != null)
+                {
+                    selectedUnit = kl;
+                    GetAllPossibilities();
+                    GameUiManager.Instance.ShowUnitStats(kl);
+                    GameUiManager.Instance.PlayerStatsAnimation();
+                }
+            }
+        }
+        else
+        {
+            foreach (Unit unit in units)
+            {
+                KingDark kd = unit as KingDark;
+                if (kd != null)
+                {
+                    selectedUnit = kd;
+                    GetAllPossibilities();
+                    GameUiManager.Instance.ShowUnitStats(kd);
+                    GameUiManager.Instance.PlayerStatsAnimation();
+                }
+            }
+        }
+        Invoke("HideConnectingPanel", 2);
         CameraAngles index = currentTeam == 0 ? CameraAngles.player1 : CameraAngles.player2;
         for (int i = 0; i < cameraAngles.Length; i++)
             cameraAngles[i].SetActive(false);
         cameraIndex = (int)index;
         cameraAngles[(int)index].SetActive(true);
+        cameraAngles[(int)index].transform.parent = cameraController.transform;
+        cameraController.SetCameraController(cameraAngles[(int)index].transform);
+    }
+
+    private void HideConnectingPanel()
+    {
+        GameUiManager.Instance.connectingPanel.SetActive(false);
     }
 
     IEnumerator UnitDeathTimer(float time, Unit unit)
@@ -589,12 +769,14 @@ public class GameManager : MonoBehaviour
         if (unit.Team == 0)
         {
             deadP1Units.Add(unit);
-            unit.GameObject.transform.position = new Vector3(8, 0, -0.5f) + Vector3.forward * deadP1Units.Count * 0.5f;
+            GameUiManager.Instance.UpdateGral(deadP1Units.Count, unit.Team);
+            unit.GameObject.transform.position = new Vector3(/*8*/108, 0, -0.5f) + Vector3.forward * deadP1Units.Count * 0.5f;
         }
         else
         {
             deadP2Units.Add(unit);
-            unit.GameObject.transform.position = new Vector3(-1, 0, 7.5f) + -Vector3.forward * deadP2Units.Count * 0.5f;
+            GameUiManager.Instance.UpdateGral(deadP2Units.Count, unit.Team);
+            unit.GameObject.transform.position = new Vector3(/*-1*/-100, 0, 7.5f) + -Vector3.forward * deadP2Units.Count * 0.5f;
         }
         unit.animator.SetBool("Death", false);
     }
@@ -604,15 +786,16 @@ public class GameManager : MonoBehaviour
         Destroy(go, time);
     }
 
-    public void SelectTeam(int team)
-    {
-        selected_class = team;
-    }
-
     public GameObject GetPrefabByPath(string path)
     {
         return Resources.Load<GameObject>(path);
     }
+
+    public Sprite GetSpriteByPath(string path)
+    {
+        return Resources.Load<Sprite>(path);
+    }
+
 }
 public enum CameraAngles
 {
