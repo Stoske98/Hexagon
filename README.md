@@ -1,5 +1,8 @@
 # Hex Chess
-Highly competitive multiplayer board game of wit and strategy, based on core Chess mechanics with new fantasy twists.
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon1.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon2.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon6.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon7.jpg)
 
 ## More information
 1. Status - Prototype
@@ -7,8 +10,6 @@ Highly competitive multiplayer board game of wit and strategy, based on core Che
 3. Genre	- Strategy
 
 ## What the game looks like
-![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon1.jpg)
-![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon2.jpg)
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon3.jpg)
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon4.jpg)
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon5.jpg)
