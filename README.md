@@ -8,7 +8,7 @@ Highly competitive multiplayer board game of wit and strategy, based on core Che
 
 ## What the game looks like
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon1.jpg)
-![alt_text](https://github.com/Stoske98/Virus-Town/blob/main/Screenshots/hexagon2.jpg)
-![alt_text](https://github.com/Stoske98/Virus-Town/blob/main/Screenshots/hexagon3.jpg)
-![alt_text](https://github.com/Stoske98/Virus-Town/blob/main/Screenshots/hexagon4.jpg)
-![alt_text](https://github.com/Stoske98/Virus-Town/blob/main/Screenshots/hexagon5.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon2.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon3.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon4.jpg)
+![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon5.jpg)
