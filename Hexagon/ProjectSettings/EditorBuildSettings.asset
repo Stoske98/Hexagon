@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/HexagonPoject/Scenes/Test.unity
+    guid: 76045c0bd755d1f4f93b37885daf13ce
+  - enabled: 1
     path: Assets/HexagonPoject/Scenes/SampleScene.unity
     guid: cbfe36cfddfde964d9dfce63a355d5dd
   - enabled: 0

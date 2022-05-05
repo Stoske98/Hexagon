@@ -12255,7 +12255,10 @@ MonoBehaviour:
   deathColor: {r: 0.4509804, g: 0.4509804, b: 0.4509804, a: 1}
   gralLight: {fileID: 15211333}
   gralDark: {fileID: 743869553}
+  chalengeRoyalGO: {fileID: 0}
   counterChalengeRoyal: {fileID: 1459268615}
+  lightDeaths: {fileID: 0}
+  darkDeaths: {fileID: 0}
 --- !u!1 &1360431360
 GameObject:
   m_ObjectHideFlags: 0
@@ -16542,7 +16545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eef737cf32cc7e4ba5b1014fab46bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ip: 192.168.0.13
+  ip: 192.168.0.35
   port: 27001
   ip_if: {fileID: 1754896130}
   port_if: {fileID: 641131395}
@@ -17274,6 +17277,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885171000}
   m_CullTransparentMesh: 0
+--- !u!1001 &1903622992
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0000000754979
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8261858031431896445, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783097583540410311, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
+      propertyPath: m_Name
+      value: grail
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 63ccfcde55dfc324ba11a7ce0ca87d9e, type: 3}
 --- !u!1 &1921550627
 GameObject:
   m_ObjectHideFlags: 0
