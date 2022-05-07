@@ -10,6 +10,7 @@
 3. Genre	- Strategy
 
 ## What the game looks like
+### Video : https://youtu.be/nabTAdWaUss
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon3.jpg)
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon4.jpg)
 ![alt_text](https://github.com/Stoske98/Hexagon/blob/main/Screenshots/hexagon5.jpg)
